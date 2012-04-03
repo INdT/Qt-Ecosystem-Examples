@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="qml/BMICalc/AppButton.qml">qml/BMICalc/HarmattanButton.qml</file>
+        <file alias="qml/BMICalc/AppButtonRow.qml">qml/BMICalc/HarmattanButtonRow.qml</file>
+        <file alias="qml/BMICalc/AppLabel.qml">qml/BMICalc/HarmattanLabel.qml</file>
+        <file alias="qml/BMICalc/AppPage.qml">qml/BMICalc/HarmattanPage.qml</file>
+        <file alias="qml/BMICalc/AppTextField.qml">qml/BMICalc/HarmattanTextField.qml</file>
+        <file alias="qml/BMICalc/AppWindow.qml">qml/BMICalc/HarmattanWindow.qml</file>
+        <file>qml/BMICalc/CalcPage.qml</file>
+        <file>qml/BMICalc/main.qml</file>
+        <file>qml/BMICalc/SplashScreen.qml</file>
+    </qresource>
+</RCC>

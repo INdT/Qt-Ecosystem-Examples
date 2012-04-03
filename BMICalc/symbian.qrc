@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file alias="qml/BMICalc/AppButton.qml">qml/BMICalc/SymbianButton.qml</file>
+        <file alias="qml/BMICalc/AppButtonRow.qml">qml/BMICalc/SymbianButtonRow.qml</file>
+        <file alias="qml/BMICalc/AppLabel.qml">qml/BMICalc/SymbianLabel.qml</file>
+        <file alias="qml/BMICalc/AppPage.qml">qml/BMICalc/SymbianPage.qml</file>
+        <file alias="qml/BMICalc/AppTextField.qml">qml/BMICalc/SymbianTextField.qml</file>
+        <file alias="qml/BMICalc/AppWindow.qml">qml/BMICalc/SymbianWindow.qml</file>
+        <file>qml/BMICalc/CalcPage.qml</file>
+        <file>qml/BMICalc/main.qml</file>
+        <file>qml/BMICalc/SplashScreen.qml</file>
+    </qresource>
+</RCC>
