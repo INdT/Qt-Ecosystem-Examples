@@ -4,4 +4,5 @@ import com.nokia.symbian 1.1
 
 TextField {
     width: 240
+    readOnly: true
 }

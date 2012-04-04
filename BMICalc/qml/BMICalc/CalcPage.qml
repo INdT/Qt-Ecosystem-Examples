@@ -36,7 +36,7 @@ AppPage {
     }
 
     TumblerColumn {
-        id: moreTumbler
+        id: headTumbler
         selectedIndex: 0
         items: heightListModel
     }
@@ -49,7 +49,7 @@ AppPage {
 
 
     TumblerColumn {
-        id: lessTumbler
+        id: tailTumbler
         selectedIndex: 0
         items: numbersListModel
     }
@@ -62,12 +62,12 @@ AppPage {
         AppTextField {
             id: heightTextField
             placeholderText: "Altura"
-            enableSoftwareInputPanel: false
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    calcPage.state = "HEIGHTENABLED"
+                    headTumbler.items = heightListModel
                     updateTumbler(heightTextField.text)
+                    calcPage.state = "HEIGHTENABLED"
                 }
             }
         }
@@ -75,26 +75,36 @@ AppPage {
         AppTextField {
             id: weightTextField
             placeholderText: "Peso"
-            enableSoftwareInputPanel: false
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    calcPage.state = "WEIGHTENABLED"
+                    headTumbler.items = weightListModel
                     updateTumbler(weightTextField.text)
+                    calcPage.state = "WEIGHTENABLED"
                 }
             }
         }
 
-        Tumbler {
-            id: tumbler
-            columns: [moreTumbler, middleTumbler, lessTumbler]
+        Item {
+            id: tumblerItem
             height: 200
             width: 240
+
+            Tumbler {
+                id: tumbler
+                anchors.fill: parent
+                columns: [headTumbler, middleTumbler, tailTumbler]
+            }
         }
 
         AppButton {
             id: calculateButton
+            enabled: (heightTextField.text !== "") && (weightTextField.text !== "")
             text: "Calcular"
+            onClicked: {
+                resultTextField.text = bmiCalc(weightTextField.text, heightTextField.text)
+                calcPage.state = "RESULT"
+            }
         }
 
         AppButtonRow {
@@ -129,20 +139,45 @@ AppPage {
         }
     }
 
-    function updateTumbler(value) {
-        var first = 0
-        var middle = 0
-        var last = 0
+    Column {
+        id: resultColumn
+        anchors.centerIn: parent
+        spacing: 80
 
-        if (!isNaN(value)) {
-            first = Math.floor(value / 100)
-            middle = Math.floor((value % 100) / 10)
-            last = Math.floor(value % 10)
+        AppTextField {
+            id: resultTextField
+            height: 100
         }
 
-        tumbler.columns[0].selectedIndex = first
-        tumbler.columns[1].selectedIndex = middle
-        tumbler.columns[2].selectedIndex = last
+        AppButton {
+            id: calculateNewButton
+            text: "Calcular Novo"
+            onClicked: {
+                heightTextField.text = ""
+                weightTextField.text = ""
+                calcPage.state = "NORMAL"
+            }
+        }
+    }
+
+    function updateTumbler(value) {
+        var head = 0
+        var middle = 0
+        var tail = 0
+
+        if (!isNaN(value)) {
+            head = Math.floor(value / 100)
+            middle = Math.floor((value % 100) / 10)
+            tail = Math.floor(value % 10)
+        }
+
+        headTumbler.selectedIndex = head
+        middleTumbler.selectedIndex = middle
+        tailTumbler.selectedIndex = tail
+    }
+
+    function bmiCalc(weight, height) {
+        return weight / Math.pow((height/100), 2)
     }
 
     state: "NORMAL"
@@ -150,32 +185,41 @@ AppPage {
     states: [
         State {
             name: "NORMAL"
+            PropertyChanges { target: resultColumn; visible: false }
+            PropertyChanges { target: column; visible: true }
             PropertyChanges { target: column; spacing: 40 }
             PropertyChanges { target: heightTextField; visible: true }
             PropertyChanges { target: weightTextField; visible: true }
-            PropertyChanges { target: tumbler; visible: false }
+            PropertyChanges { target: tumblerItem; visible: false }
             PropertyChanges { target: calculateButton; visible: true }
             PropertyChanges { target: buttonRow; visible: false }
         },
         State {
             name: "HEIGHTENABLED"
+            PropertyChanges { target: resultColumn; visible: false }
+            PropertyChanges { target: column; visible: true }
             PropertyChanges { target: column; spacing: 5 }
             PropertyChanges { target: heightTextField; visible: true }
             PropertyChanges { target: weightTextField; visible: false }
-            PropertyChanges { target: moreTumbler; items: heightListModel }
-            PropertyChanges { target: tumbler; visible: true }
+            PropertyChanges { target: tumblerItem; visible: true }
             PropertyChanges { target: calculateButton; visible: false }
             PropertyChanges { target: buttonRow; visible: true }
         },
         State {
             name: "WEIGHTENABLED"
+            PropertyChanges { target: resultColumn; visible: false }
+            PropertyChanges { target: column; visible: true }
             PropertyChanges { target: column; spacing: 10 }
             PropertyChanges { target: heightTextField; visible: false }
             PropertyChanges { target: weightTextField; visible: true }
-            PropertyChanges { target: moreTumbler; items: weightListModel }
-            PropertyChanges { target: tumbler; visible: true }
+            PropertyChanges { target: tumblerItem; visible: true }
             PropertyChanges { target: calculateButton; visible: false }
             PropertyChanges { target: buttonRow; visible: true }
+        },
+        State {
+            name: "RESULT"
+            PropertyChanges { target: column; visible: false }
+            PropertyChanges { target: resultColumn; visible: true }
         }
     ]
 }
